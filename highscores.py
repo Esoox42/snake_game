@@ -36,18 +36,22 @@ class HighScoreManager:
         """Add a new score and return True if it made the top 10"""
         new_entry = {"name": name, "score": score}
         
+        # Check if it's a new highest score before adding
+        current_highest = self.high_scores[0]['score'] if self.high_scores else 0
+        is_new_highest = score > current_highest
+
         # Add new score and sort
         self.high_scores.append(new_entry)
         self.high_scores.sort(key=lambda x: x["score"], reverse=True)
         
-        # Keep only top 10
-        self.high_scores = self.high_scores[:10]
+        # Keep only top 5
+        self.high_scores = self.high_scores[:5]
         
         # Save to file
         self._save_scores()
         
-        # Return True if score made it to top 10
-        return new_entry in self.high_scores
+        # Return True if score is the new highest score
+        return is_new_highest
     
     def get_high_scores(self) -> List[Dict]:
         return self.high_scores

@@ -1,14 +1,22 @@
 [
     {
         "name": "LOIC",
+        "score": 20
+    },
+    {
+        "name": "LOIC",
         "score": 10
     },
     {
         "name": "LOIC",
-        "score": 2
+        "score": 4
     },
     {
         "name": "LOIC",
-        "score": 1
+        "score": 3
+    },
+    {
+        "name": "LOIC",
+        "score": 2
     }
 ]
