@@ -13,7 +13,9 @@ FPS = 10  # Frames per second (controls game speed)
 # Colors
 BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
+DARK_GREEN = (0, 200, 0)
 RED = (255, 0, 0)
+DARK_RED = (200, 0, 0)
 WHITE = (255, 255, 255)
 GAME_OVER_BG = (0, 0, 0, 180)
 
@@ -115,8 +117,67 @@ while running:
     score_text = font.render(f"Score: {score}", True, WHITE) # Draw score
     screen.blit(score_text, (10, 10))
 
-    for segment in snake:
-        pygame.draw.rect(screen, GREEN, (*segment, BLOCK_SIZE, BLOCK_SIZE))  # Draw each block of the snake
+    # Draw snake
+    for i, segment in enumerate(snake):
+        # Draw the main body segment
+        pygame.draw.rect(screen, GREEN if i == 0 else DARK_GREEN, 
+                        (*segment, BLOCK_SIZE, BLOCK_SIZE))
+        
+        # Add details to the head (first segment)
+        if i == 0:
+            # Calculate the center of the block for eyes
+            center_x, center_y = segment[0] + BLOCK_SIZE//2, segment[1] + BLOCK_SIZE//2
+            
+            # Draw eyes based on direction
+            eye_radius = 3
+            if snake_direction == "RIGHT":
+                # Eyes on the right side
+                pygame.draw.circle(screen, BLACK, (segment[0] + BLOCK_SIZE - 5, segment[1] + 7), eye_radius)
+                pygame.draw.circle(screen, BLACK, (segment[0] + BLOCK_SIZE - 5, segment[1] + BLOCK_SIZE - 7), eye_radius)
+                # Tongue on the right
+                pygame.draw.line(screen, DARK_RED, (segment[0] + BLOCK_SIZE, center_y), 
+                               (segment[0] + BLOCK_SIZE + 10, center_y), 2)
+                pygame.draw.line(screen, DARK_RED, (segment[0] + BLOCK_SIZE + 10, center_y), 
+                               (segment[0] + BLOCK_SIZE + 15, center_y - 5), 2)
+                pygame.draw.line(screen, DARK_RED, (segment[0] + BLOCK_SIZE + 10, center_y), 
+                               (segment[0] + BLOCK_SIZE + 15, center_y + 5), 2)
+            
+            elif snake_direction == "LEFT":
+                # Eyes on the left side
+                pygame.draw.circle(screen, BLACK, (segment[0] + 5, segment[1] + 7), eye_radius)
+                pygame.draw.circle(screen, BLACK, (segment[0] + 5, segment[1] + BLOCK_SIZE - 7), eye_radius)
+                # Tongue on the left
+                pygame.draw.line(screen, DARK_RED, (segment[0], center_y), 
+                               (segment[0] - 10, center_y), 2)
+                pygame.draw.line(screen, DARK_RED, (segment[0] - 10, center_y), 
+                               (segment[0] - 15, center_y - 5), 2)
+                pygame.draw.line(screen, DARK_RED, (segment[0] - 10, center_y), 
+                               (segment[0] - 15, center_y + 5), 2)
+            
+            elif snake_direction == "UP":
+                # Eyes on the top
+                pygame.draw.circle(screen, BLACK, (segment[0] + 7, segment[1] + 5), eye_radius)
+                pygame.draw.circle(screen, BLACK, (segment[0] + BLOCK_SIZE - 7, segment[1] + 5), eye_radius)
+                # Tongue on the top
+                pygame.draw.line(screen, DARK_RED, (center_x, segment[1]), 
+                               (center_x, segment[1] - 10), 2)
+                pygame.draw.line(screen, DARK_RED, (center_x, segment[1] - 10), 
+                               (center_x - 5, segment[1] - 15), 2)
+                pygame.draw.line(screen, DARK_RED, (center_x, segment[1] - 10), 
+                               (center_x + 5, segment[1] - 15), 2)
+            
+            elif snake_direction == "DOWN":
+                # Eyes on the bottom
+                pygame.draw.circle(screen, BLACK, (segment[0] + 7, segment[1] + BLOCK_SIZE - 5), eye_radius)
+                pygame.draw.circle(screen, BLACK, (segment[0] + BLOCK_SIZE - 7, segment[1] + BLOCK_SIZE - 5), eye_radius)
+                # Tongue on the bottom
+                pygame.draw.line(screen, DARK_RED, (center_x, segment[1] + BLOCK_SIZE), 
+                               (center_x, segment[1] + BLOCK_SIZE + 10), 2)
+                pygame.draw.line(screen, DARK_RED, (center_x, segment[1] + BLOCK_SIZE + 10), 
+                               (center_x - 5, segment[1] + BLOCK_SIZE + 15), 2)
+                pygame.draw.line(screen, DARK_RED, (center_x, segment[1] + BLOCK_SIZE + 10), 
+                               (center_x + 5, segment[1] + BLOCK_SIZE + 15), 2)
+
     pygame.draw.rect(screen, RED, (*food, BLOCK_SIZE, BLOCK_SIZE))  # Draw the food
 
     if game_over:
