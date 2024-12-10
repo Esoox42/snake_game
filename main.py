@@ -23,17 +23,25 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif game.in_menu:
+                game.handle_menu_input(event)
             elif event.type == pygame.KEYDOWN:
                 if game.game_over:
                     if event.key == pygame.K_r:
                         game.reset()
+                        game.in_menu = True  # Return to menu on restart
                     elif event.key == pygame.K_q:
                         running = False
                 else:
-                    handle_input(event.key, game)
+                    if event.type == pygame.KEYDOWN:
+                        handle_input(event.key, game)
         
-        game.update()
-        draw(screen, game, font)
+        if game.in_menu:
+            game.draw_menu(screen, font)
+        else:
+            game.update()
+            draw(screen, game, font)
+            
         pygame.display.flip()
         clock.tick(FPS)
     
