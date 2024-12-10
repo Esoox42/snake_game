@@ -34,7 +34,7 @@ class Game:
         if self.check_collision():
             self.game_over = True
         elif self.snake.body[0] == self.food.position:
-            self.food.position = self.food.generate_position()
+            self.food.new_fruit()
             self.score += 1
         else:
             self.snake.shrink()
